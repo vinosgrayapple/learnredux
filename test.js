@@ -1,4 +1,5 @@
-import { createStore } from 'redux'
+// import { createStore } from 'redux'
+const {createStore} =  require('redux')
 
 /**
  * This is a reducer - a function that takes a current state value and an

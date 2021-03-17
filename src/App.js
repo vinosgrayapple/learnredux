@@ -1,58 +1,47 @@
 import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
-
-function App() {
+import { connect } from "react-redux";
+function App({tracks,add_track,search_track}) {
+  let textInput = React.createRef();
+  let searchInput = React.createRef()
+ const  handlerClick = () => {
+  add_track(textInput.current.value)
+  textInput.current.value=''
+  }
+  const  handlerSearch = () => {
+    search_track(searchInput.current.value)
+    }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+    <div className="bar">
+      <input type="text" ref={textInput}/>
+      <button onClick={handlerClick}>Add Track</button>
+    </div>
+    <div className="search">
+      <input type="text" onChange={handlerSearch} ref={searchInput}/>
+      <button onClick={handlerSearch}>Find Track</button>
+    </div>
+    <ul id="listTrack">
+      {tracks.map((track,i) => <li key={i}>{track.name}</li>)}
+    </ul>
     </div>
   );
 }
 
-export default App;
+export default connect(
+  state  => ({
+    tracks: state.tracks.filter(track => track.name.includes(state.filterTracks))
+  }),
+  dispatch => ({
+    add_track(trackname) {
+      const payload = {
+        id: Date.now().toString(),
+        name: trackname
+      }
+      console.log(payload);
+      dispatch({ type: 'ADD_TRACK', payload })
+    },
+    search_track(trackname) {
+      dispatch({ type: 'SEARCH_TRACK', payload: trackname })
+    },
+  })
+)(App);
