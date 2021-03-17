@@ -1,8 +1,12 @@
 import React from 'react';
 import { connect } from "react-redux";
-function App({tracks,add_track,search_track}) {
+import { getTracks } from './actions/tracks'
+function App({tracks,add_track,search_track,get_tracks}) {
   let textInput = React.createRef();
   let searchInput = React.createRef()
+const handlerGetTracks = () => {
+  get_tracks()
+}
  const  handlerClick = () => {
   add_track(textInput.current.value)
   textInput.current.value=''
@@ -12,14 +16,17 @@ function App({tracks,add_track,search_track}) {
     }
   return (
     <div className="App">
-    <div className="bar">
+    <p className="bar">
       <input type="text" ref={textInput}/>
       <button onClick={handlerClick}>Add Track</button>
-    </div>
-    <div className="search">
+    </p>
+    <p className="search">
       <input type="text" onChange={handlerSearch} ref={searchInput}/>
       <button onClick={handlerSearch}>Find Track</button>
-    </div>
+    </p>
+    <p>
+      <button onClick={handlerGetTracks}>Get Tracks</button>
+    </p>
     <ul id="listTrack">
       {tracks.map((track,i) => <li key={i}>{track.name}</li>)}
     </ul>
@@ -43,5 +50,8 @@ export default connect(
     search_track(trackname) {
       dispatch({ type: 'SEARCH_TRACK', payload: trackname })
     },
+    get_tracks(){
+      dispatch(getTracks())
+    }
   })
 )(App);

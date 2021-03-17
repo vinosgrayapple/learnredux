@@ -1,5 +1,4 @@
-const initalState =  [
-    ]
+const initalState =  []
 
 export   function tracks(state=initalState, action) {
   switch(action.type){
@@ -7,6 +6,8 @@ export   function tracks(state=initalState, action) {
       return  [...state, action.payload]
     case 'DELETE_TRACK':
         return  state.filter(track => track !== action.payload)
+    case 'FETCH_TRACKS_SUCCESS':
+      return action.payload
     default:
       return state
     }
